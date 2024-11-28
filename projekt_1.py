@@ -9,6 +9,7 @@ github: TadeasBoomer
 import sys
 import re
 from collections import Counter
+import string
 
 TEXTS = ['''
 Situated about 10 miles west of Kemmerer,
@@ -67,21 +68,22 @@ try:
 
     vybrany_text = TEXTS[uzivatel_vstup - 1]
 
-    slova_velke_pismeno = len([slovo for slovo in vybrany_text.split() if slovo.istitle()])
-    slova_velkymi = len([slovo for slovo in vybrany_text.split() if slovo.isupper()])
-    slova_malymi = len([slovo for slovo in vybrany_text.split() if slovo.islower()])
+    slova = vybrany_text.split()
+
+    slova_velke_pismeno = len([slovo for slovo in slova if slovo.istitle()])
+    slova_velkymi = len([slovo for slovo in slova if slovo.isupper()])
+    slova_malymi = len([slovo for slovo in slova if slovo.islower()])
     cisla = [int(cislo) for cislo in re.findall(r'\b\d+\b', vybrany_text)]
 
     print("V tebou vybraném textu je: ")
     print(len(vybrany_text.split()), "slov,")
-    print("z toho ", slova_velkymi, "začíná velkým písmenem,")
-    print(slova_velke_pismeno, "je psáno velkým písmem,")
+    print("z toho ", slova_velke_pismeno, "začíná velkým písmenem,")
+    print(slova_velkymi, "je psáno velkým písmem,")
     print(slova_malymi, "je psáno malým písmem,")
     print(len(cisla), "jsou čísla a jejich součet je: ", sum(cisla))
 
-
-    slova = vybrany_text.split()
-    delky_slov = [len(slovo) for slovo in slova]
+    #delky_slov = [len(slovo) for slovo in slova]
+    delky_slov = [len(''.join(char for char in slovo if char.isalnum())) for slovo in slova]
     cetnost_delky = Counter(delky_slov)
     print("Četnost délek slov v textu:")
     for delka, cetnost in sorted(cetnost_delky.items()):
